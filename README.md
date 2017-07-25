@@ -26,6 +26,9 @@ Webgl Demo
 ----------
 http://www.noisecrime.com/unity/demos/EasingLibraryVisualisationWebglDemo/index.html
 
+Forum Page
+----------
+https://forum.unity3d.com/threads/easing-equations-visualisation-in-unity.483908/
 
 System Requirements
 -------------------
