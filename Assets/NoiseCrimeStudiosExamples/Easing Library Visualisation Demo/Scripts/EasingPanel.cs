@@ -23,7 +23,7 @@ SOFTWARE.
 
 using UnityEngine;
 using UnityEngine.UI;
-using NoiseCrimeStudios.Core.Features;
+using NoiseCrimeStudios.Core.Features.Easing;
 
 namespace NoiseCrimeStudios.Demo.Easing
 {
@@ -39,14 +39,15 @@ namespace NoiseCrimeStudios.Demo.Easing
 		public  Slider                      m_SliderColumn;
 
 		public  Text                        m_PanelNumEquations;
-		public  float                       m_Duration          = 2f;
+		public  float                       m_Duration				= 2f;
+		public	bool						m_SlideByEaseEquation	= true;
 
 		private RectTransform               m_RectTransform;
-		private bool                        m_IsActive          = false;
-		private bool                        m_IsAnimating       = false;
+		private bool                        m_IsActive				= false;
+		private bool                        m_IsAnimating			= false;
 
-		private float                       m_EaseEquationIndex = 0;
-		private float                       m_SlideWidth        = 1f;
+		private float                       m_EaseEquationIndex		= 0;
+		private float                       m_SlideWidth			= 1f;
 
 		private EasingGraphManager          m_EasingGraphManager;
 
@@ -71,6 +72,11 @@ namespace NoiseCrimeStudios.Demo.Easing
 			set { m_Duration = value; if ( m_Duration < 0.1f ) m_Duration = 0.1f; }
 		}
 
+		public bool SlideByEaseEquation
+		{
+			get { return m_SlideByEaseEquation; }
+			set { m_SlideByEaseEquation = value;  }
+		}
 
 		void Start()
 		{
@@ -111,13 +117,16 @@ namespace NoiseCrimeStudios.Demo.Easing
 
 			m_IsActive = !m_IsActive;
 			m_IsAnimating = true;
-
-
+			
 			float start     = m_IsActive ? -m_SlideWidth : 0f;
 			float finish    = m_IsActive ?  m_SlideWidth : -m_SlideWidth;
+			
+			TweenActionEase_RectTransformSlide.Begin<TweenActionEase_RectTransformSlide>( m_PanelLinearGO, start, finish, m_Duration, EasingEquationsDouble.Equations.Linear, onComplete );
 
-			TweenAction_RectTransformSlide.Begin<TweenAction_RectTransformSlide>( gameObject, start, finish, m_Duration, ( EasingEquationsDouble.Equations )( int )m_EaseEquationIndex, onComplete );
-			TweenAction_RectTransformSlide.Begin<TweenAction_RectTransformSlide>( m_PanelLinearGO, start, finish, m_Duration, EasingEquationsDouble.Equations.Linear, onComplete );
+			if ( m_SlideByEaseEquation )
+				TweenActionEase_RectTransformSlide.Begin<TweenActionEase_RectTransformSlide>( gameObject, start, finish, m_Duration, ( EasingEquationsDouble.Equations )( int )m_EaseEquationIndex, onComplete );
+			else
+				TweenActionCurve_RectTransformSlide.Begin<TweenActionCurve_RectTransformSlide>( gameObject, start, finish, m_Duration, m_EasingGraphManager.m_EasingAnimationCurveCache.m_AnimationCurves[(int)m_EaseEquationIndex], onComplete );			
 		}
 
 

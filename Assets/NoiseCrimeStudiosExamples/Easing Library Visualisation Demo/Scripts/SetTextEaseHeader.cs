@@ -23,7 +23,7 @@ SOFTWARE.
 
 using UnityEngine;
 using UnityEngine.UI;
-using NoiseCrimeStudios.Core.Features;
+using NoiseCrimeStudios.Core.Features.Easing;
 
 namespace NoiseCrimeStudios.Demo.Easing
 {

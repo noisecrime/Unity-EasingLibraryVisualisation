@@ -54,13 +54,15 @@
 
 using System;
 
-namespace NoiseCrimeStudios.Core.Features
+namespace NoiseCrimeStudios.Core.Features.Easing
 {
 	/// <summary>
 	/// Class of common and unusual easing equations as originally created by Robert Penner.
 	/// </summary>
 	public class EasingEquationsDouble 
 	{
+		public static int m_NumEquations = -1;
+
 		/// <summary>
 		/// Enumeration of all easing equations for use with CreateDelegate.
 		/// </summary>
@@ -77,6 +79,13 @@ namespace NoiseCrimeStudios.Core.Features
 			BounceEaseOut, BounceEaseIn, BounceEaseInOut, BounceEaseOutIn,
 			BackEaseOut, BackEaseIn, BackEaseInOut, BackEaseOutIn,
 			Linear
+		}
+
+		public static int GetNumberOfEquations()
+		{
+			if ( m_NumEquations == -1 )	m_NumEquations = Enum.GetNames( typeof(Equations) ).Length;
+			
+			return m_NumEquations;
 		}
 
 				

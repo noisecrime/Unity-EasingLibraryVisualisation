@@ -23,7 +23,7 @@ SOFTWARE.
 
 using UnityEngine;
 using UnityEngine.EventSystems;
-using NoiseCrimeStudios.Core.Features;
+using NoiseCrimeStudios.Core.Features.Easing;
 
 namespace NoiseCrimeStudios.Demo.Easing
 {
@@ -65,7 +65,7 @@ namespace NoiseCrimeStudios.Demo.Easing
 			float start     = m_IsOpening ?  m_Start     : m_Start-m_Offset;
 			float finish    = m_IsOpening ? -m_Offset    : m_Offset;
 
-			TweenAction_RectTransformSlide.Begin<TweenAction_RectTransformSlide>( gameObject, start, finish, m_EasingGraphManager.duration, m_Equation, onComplete );
+			TweenActionEase_RectTransformSlide.Begin<TweenActionEase_RectTransformSlide>( gameObject, start, finish, m_EasingGraphManager.duration, m_Equation, onComplete );
 		}
 
 		void onComplete( bool result )

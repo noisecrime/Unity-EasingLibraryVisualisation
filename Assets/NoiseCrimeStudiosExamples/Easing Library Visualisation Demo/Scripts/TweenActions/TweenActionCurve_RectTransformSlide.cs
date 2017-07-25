@@ -22,7 +22,7 @@ SOFTWARE.
 */
 
 using UnityEngine;
-using NoiseCrimeStudios.Core.Features;
+using NoiseCrimeStudios.Core.Features.Easing;
 using System;
 
 namespace NoiseCrimeStudios.Demo.Easing
@@ -31,20 +31,18 @@ namespace NoiseCrimeStudios.Demo.Easing
 	/// Tweening class to animate a RectTransform.
 	/// Example of using EasingEquationsDouble class with CreateDelegate to select the desired Ease Equation.
 	/// </summary>
-	public class TweenAction_RectTransformSlide : MonoBehaviour
+	public class TweenActionCurve_RectTransformSlide : MonoBehaviour
 	{
 		private Vector3                         m_Position;
 
-		private float                           m_Duration  = 1f;
-		private float                           m_Timer     = 0f;
-
+		private float                           m_Duration	= 1f;
+		private float                           m_Timer		= 0f;
 		private float                           m_Start     = 0f;
 		private float                           m_Offset    = 1f;
 
 		private Action<bool>                    m_OnComplete;
 
-		public delegate double					Ease( double t, double b, double c, double d );
-		public Ease                             m_EaseMethod;
+		public	AnimationCurve					m_TweenCurve;
 
 		void OnEnable() { }
 			
@@ -61,13 +59,13 @@ namespace NoiseCrimeStudios.Demo.Easing
 				if ( m_OnComplete != null ) m_OnComplete( true );
 				m_OnComplete = null;
 			}
-
-			m_Position.x = ( float )m_EaseMethod( m_Timer, m_Start, m_Offset, m_Duration );
+			
+			m_Position.x = m_Start + ( m_Offset * m_TweenCurve.Evaluate(m_Timer/m_Duration));
 			transform.position = m_Position;
 		}
 
 
-		static public T Begin<T>( GameObject go, float start, float offset, float duration, EasingEquationsDouble.Equations easeEquation, Action<bool> onComplete = null ) where T : TweenAction_RectTransformSlide
+		static public T Begin<T>( GameObject go, float start, float offset,  float duration, AnimationCurve tweenCurve, Action<bool> onComplete = null ) where T : TweenActionCurve_RectTransformSlide
 		{
 			T component = go.GetComponent<T>();
 
@@ -78,7 +76,7 @@ namespace NoiseCrimeStudios.Demo.Easing
 			if ( duration < 0.1f ) duration = 0.1f;
 
 			component.m_Position	= go.transform.position;
-			component.m_EaseMethod	= ( Ease )Delegate.CreateDelegate( typeof( Ease ), typeof( EasingEquationsDouble ).GetMethod( easeEquation.ToString() ) );
+			component.m_TweenCurve 	= tweenCurve;
 			component.m_Timer		= 0f;
 			component.m_Duration	= duration;
 			component.m_Start		= start;
